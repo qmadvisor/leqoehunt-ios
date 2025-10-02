@@ -1,0 +1,98 @@
+name: Build iOS IPA
+
+# Bila nak build, just click "Run workflow" di GitHub
+on:
+  workflow_dispatch:  # Manual trigger - you control when to build
+  push:
+    branches: [ main ]  # Auto-build when push to main
+
+jobs:
+  build-ios:
+    name: Build LeqoeHunt iOS App
+    runs-on: macos-latest  # GitHub provide Mac for free!
+
+    steps:
+      # Step 1: Download code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Step 3: Install CocoaPods
+      - name: Install CocoaPods
+        run: |
+          sudo gem install cocoapods
+          pod --version
+
+      # Step 4: Install npm dependencies
+      - name: Install npm packages
+        run: |
+          npm install
+
+      # Step 5: Install iOS dependencies (pods)
+      - name: Install iOS dependencies
+        run: |
+          cd ios/App
+          pod install
+
+      # Step 6: Build iOS app (no signing - for InstallOnAir)
+      - name: Build iOS app
+        run: |
+          cd ios/App
+
+          # Build unsigned app
+          xcodebuild clean build \
+            -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      # Step 7: Create IPA file
+      - name: Create IPA package
+        run: |
+          cd ios/App/build/Build/Products/Release-iphoneos
+
+          # Create Payload folder
+          mkdir -p Payload
+
+          # Copy app to Payload
+          cp -r App.app Payload/
+
+          # Create IPA (just a zip file)
+          zip -r LeqoeHunt-v2.0.0-UNSIGNED.ipa Payload
+
+          # Move to easy location
+          mv LeqoeHunt-v2.0.0-UNSIGNED.ipa ~/LeqoeHunt.ipa
+
+          # Show file size
+          ls -lh ~/LeqoeHunt.ipa
+
+      # Step 8: Upload IPA as artifact (you download from GitHub)
+      - name: Upload IPA
+        uses: actions/upload-artifact@v3
+        with:
+          name: LeqoeHunt-iOS-IPA
+          path: ~/LeqoeHunt.ipa
+          retention-days: 30  # Keep for 30 days
+
+      # Step 9: Show summary
+      - name: Build Summary
+        run: |
+          echo "✅ IPA BUILD SUCCESS!"
+          echo ""
+          echo "📱 App: LeqoeHunt iOS v2.0.0"
+          echo "📦 File: LeqoeHunt.ipa"
+          echo "📏 Size: $(du -h ~/LeqoeHunt.ipa | cut -f1)"
+          echo ""
+          echo "🔽 Download: Go to Actions tab → Click this run → Download artifact"
+          echo "📤 Upload to: https://installonair.com"
+          echo ""
+          echo "⚠️  Note: This IPA is UNSIGNED (for InstallOnAir signing)"

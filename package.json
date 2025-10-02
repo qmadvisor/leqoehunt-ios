@@ -1,0 +1,23 @@
+{
+  "name": "leqoehunt",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@capacitor-mlkit/barcode-scanning": "^7.3.0",
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/camera": "^6.1.2",
+    "@capacitor/cli": "^6.1.2",
+    "@capacitor/core": "^6.1.2",
+    "@capacitor/geolocation": "^6.1.0",
+    "@capacitor/ios": "^6.1.2",
+    "@capacitor/push-notifications": "^5.1.0",
+    "firebase": "^12.3.0"
+  }
+}

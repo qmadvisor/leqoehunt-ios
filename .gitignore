@@ -1,0 +1,22 @@
+# Node
+node_modules/
+npm-debug.log
+package-lock.json
+
+# iOS
+ios/App/Pods/
+ios/App/build/
+ios/App/*.xcworkspace/xcuserdata/
+ios/App/*.xcodeproj/xcuserdata/
+*.ipa
+
+# Android
+android/app/build/
+android/.gradle/
+*.apk
+*.aab
+
+# General
+.DS_Store
+*.log
+.env

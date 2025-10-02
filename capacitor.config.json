@@ -1,0 +1,20 @@
+{
+  "appId": "com.leqoehunt.app",
+  "appName": "LeqoeHunt",
+  "webDir": "www",
+  "server": {
+    "url": "https://leqoehunt.my",
+    "cleartext": true
+  },
+  "plugins": {
+    "Geolocation": {
+      "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION"]
+    },
+    "Camera": {
+      "permissions": ["CAMERA", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
+    },
+    "PushNotifications": {
+      "presentationOptions": ["badge", "sound", "alert"]
+    }
+  }
+}

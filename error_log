@@ -1,0 +1,5 @@
+[30-Sep-2025 00:25:48 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000] [1044] Access denied for user 'leqoehunt'@'localhost' to database 'leqoehunt' in /home/leqoehunt/public_html/check_subs.php:2
+Stack trace:
+#0 /home/leqoehunt/public_html/check_subs.php(2): PDO->__construct('mysql:host=loca...', 'leqoehunt', Object(SensitiveParameterValue))
+#1 {main}
+  thrown in /home/leqoehunt/public_html/check_subs.php on line 2
