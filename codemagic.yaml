@@ -1,0 +1,44 @@
+workflows:
+  ios-workflow:
+    name: iOS Build
+    max_build_duration: 60
+    instance_type: mac_mini_m1
+    environment:
+      xcode: latest
+      cocoapods: default
+      node: 18
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios/App
+          pod install
+      - name: Build iOS app
+        script: |
+          cd ios/App
+          xcodebuild clean build \
+            -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+      - name: Create IPA
+        script: |
+          cd ios/App/build/Build/Products/Release-iphoneos
+          mkdir -p Payload
+          cp -r App.app Payload/
+          zip -r LeqoeHunt.ipa Payload
+          mv LeqoeHunt.ipa $CM_BUILD_DIR/LeqoeHunt.ipa
+    artifacts:
+      - LeqoeHunt.ipa
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
